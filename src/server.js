@@ -2,12 +2,16 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const { default: axios } = require('axios');
+const dotenv = require('dotenv');
+dotenv.config();
 
-const OPENAI_API_KEY ='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';
+
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+console.log("✅ API KEY:", process.env.OPENAI_API_KEY);
+
 
 mongoose.connect('mongodb://127.0.0.1:27017/taskdb')
 .then(()=>{
@@ -65,39 +69,48 @@ app.delete('/api/tasks/:id',async(req,res)=>{
     }
 })
 
-app.post('/api/chatgpt', async (req, res) => {
+app.post('/api/openai', async (req, res) => {
   const userMessage = req.body.message;
-
-  if (!userMessage || typeof userMessage !== 'string') {
-    return res.status(400).json({ error: 'Invalid input message' });
-  }
-
   try {
     const response = await axios.post(
       'https://openrouter.ai/api/v1/chat/completions',
       {
-        model: 'openai/gpt-3.5-turbo',
-        messages: [
-          { role: 'system', content: 'You are a helpful AI tutor.' },
-          { role: 'user', content: userMessage },
-        ],
+        model: "openai/gpt-3.5-turbo", // Or any supported model
+        messages: [{ role: 'user', content: userMessage }],
       },
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${OPENAI_API_KEY}`,
-        'HTTP-Referer': 'http://localhost:3000',
+          'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
         },
       }
     );
 
-    const reply = response.data.choices[0].message.content;
-    res.json({ reply });
+    res.json({ reply: response.data.choices[0].message.content });
   } catch (error) {
-    console.error('ChatGPT API error:', error.response?.data || error.message);
-    res.status(500).json({ error: 'Failed to fetch response from ChatGPT' });
+    console.error('OpenAI API error:', error.response?.data || error);
+    res.status(500).json({ error: 'OpenAI API call failed' });
   }
 });
+
+
+
+
+//checking for models of gemini
+// async function listModels() {
+//   try {
+//     const models = await axios.get('https://openrouter.ai/api/v1/models', {
+//   headers: {
+//     Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`
+//   }
+// });
+//     console.log('Available models:', models.data);
+//   } catch (error) {
+//     console.error('Error fetching models:', error.response?.data || error.message);
+//   }
+// }
+
+// listModels();
 
 const reviewSchema = new mongoose.Schema({
     topic: String,
