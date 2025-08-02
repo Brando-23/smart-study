@@ -1,0 +1,51 @@
+.study-container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.panel-left {
+  width: 50%;
+  border-right: 1px solid #ccc;
+  overflow-y: auto;
+  background-color: #f0f4f8;
+}
+
+.panel-right {
+  width: 50%;
+  padding: 20px;
+  background-color: #ffffff;
+  overflow-y: auto;
+}
+
+.chat-heading {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.chat-placeholder {
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 10px;
+  min-height: 400px;
+  background-color: #f9f9f9;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .study-container {
+    flex-direction: column;
+  }
+
+  .panel-left,
+  .panel-right {
+    width: 100%;
+    height: auto;
+  }
+
+  .panel-left {
+    border-right: none;
+    border-bottom: 1px solid #ccc;
+  }
+}
