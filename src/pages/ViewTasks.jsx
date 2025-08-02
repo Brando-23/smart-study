@@ -4,8 +4,8 @@ import TaskCard from '../components/TaskCard';
 
 function ViewTasks() {
   const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Fetch tasks when the component mounts
   useEffect(() => {
     fetchTasks();
   }, []);
@@ -14,9 +14,10 @@ function ViewTasks() {
     try {
       const response = await axios.get('http://localhost:3000/api/tasks');
       setTasks(response.data);
-      console.log('Tasks fetched successfully:', response.data);
     } catch (error) {
       console.error('Error fetching tasks:', error);
+    } finally {
+      setLoading(false); // always stop loading
     }
   };
 
@@ -24,7 +25,6 @@ function ViewTasks() {
     console.log("Trying to delete task:", id);
     try {
       await axios.delete(`http://localhost:3000/api/tasks/${id}`);
-      // Update UI immediately
       setTasks((prevTasks) => prevTasks.filter((task) => task._id !== id));
       console.log('Task deleted successfully:', id);
     } catch (error) {
@@ -34,24 +34,32 @@ function ViewTasks() {
 
   return (
     <div>
-      <h2 style={{ textAlign: 'center', marginTop: '20px' }}>📋 All Tasks</h2>
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
-        {tasks.length > 0 ? (
-          tasks.map((task1) => (
-            <TaskCard
-              key={task1._id}
-              id={task1._id}
-              task={task1.task}
-              description={task1.description}
-              dueDate={task1.dueDate}
-              priority={task1.priority}
-              onComplete={handleComplete}
-            />
-          ))
-        ) : (
-          <p>No tasks found.</p>
-        )}
-      </div>
+      {loading ? (
+        <div style={{ textAlign: 'center', marginTop: '40px', fontSize: '18px' }}>
+          ⏳ Loading tasks...
+        </div>
+      ) : (
+        <>
+          <h2 style={{ textAlign: 'center', marginTop: '20px' }}>📋 All Tasks</h2>
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+            {tasks.length > 0 ? (
+              tasks.map((task1) => (
+                <TaskCard
+                  key={task1._id}
+                  id={task1._id}
+                  task={task1.task}
+                  description={task1.description}
+                  dueDate={task1.dueDate}
+                  priority={task1.priority}
+                  onComplete={handleComplete}
+                />
+              ))
+            ) : (
+              <p>No tasks found.</p>
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 }
