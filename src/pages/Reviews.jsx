@@ -17,7 +17,7 @@ const Reviews = () => {
   };
 
   const handleSubmit = async (e) => {
-        e.preventDefault();
+    e.preventDefault();
     try {
       const res = await axios.post("http://localhost:3000/api/review", formData);
       console.log("Review added successfully:", res.data);
@@ -54,12 +54,16 @@ const Reviews = () => {
       color: "#444",
     },
     tinput: {
-      width: "100%",
-      padding: "10px",
-      border: "1px solid #ccc",
-      borderRadius: "8px",
-      fontSize: "16px",
-      height: "80px",
+      width: '100%',
+      padding: '10px 14px',
+      fontSize: '16px',
+      borderRadius: '8px',
+      border: '1px solid #ccc',
+      outline: 'none',
+      marginBottom: '16px',
+      boxSizing: 'border-box',
+      resize: 'vertical', // allows user to resize vertically
+      fontFamily: 'inherit', // keep font consistent
     },
     dinput: {
       width: "100%",
@@ -86,26 +90,28 @@ const Reviews = () => {
       <form onSubmit={handleSubmit}>
         <div style={styles.inputGroup}>
           <label style={styles.label}>Study Topic</label>
-          <input
-            type="text"
+          <textarea
             name="topic"
             style={styles.tinput}
             value={formData.topic}
             onChange={handleChange}
             required
+            rows={3} 
           />
+
         </div>
 
         <div style={styles.inputGroup}>
           <label style={styles.label}>Task Summary</label>
-          <input
-            type="text"
+          <textarea
             name="task"
             style={styles.tinput}
             value={formData.task}
             onChange={handleChange}
             required
+            rows={4}
           />
+
         </div>
 
         <div style={styles.inputGroup}>
