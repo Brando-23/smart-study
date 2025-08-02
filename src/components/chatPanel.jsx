@@ -16,7 +16,7 @@ const ChatGPTPanel = () => {
 
     try {
       // Send message to your backend (not directly to OpenAI)
-      const res = await axios.post('http://localhost:3000/api/chatgpt', {
+      const res = await axios.post('http://localhost:3000/api/openai', {
         message: input,
       });
 
