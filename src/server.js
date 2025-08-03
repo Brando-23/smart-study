@@ -69,6 +69,7 @@ app.delete('/api/tasks/:id',async(req,res)=>{
     }
 })
 
+
 app.post('/api/openai', async (req, res) => {
   const userMessage = req.body.message;
   try {
@@ -191,6 +192,27 @@ app.post('/api/login', async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 });
+
+
+//Dashboard route
+// Task model assumed as Task
+app.get('/api/tasks/count', async (req, res) => {
+  try {
+    const count = await Task.countDocuments();
+    res.json({ count });
+  } catch (err) {
+    res.status(500).json({ error: 'Error fetching total tasks' });
+  }
+});
+app.get('/api/review/count', async (req, res) => {
+  try {
+    const count = await Review.countDocuments();
+    res.json({ count });
+  } catch (err) {
+    res.status(500).json({ error: 'Error fetching total Reviews' });
+  }
+});
+
 
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');
