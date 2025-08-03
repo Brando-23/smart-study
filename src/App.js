@@ -10,6 +10,7 @@ import Reviews from './pages/Reviews';
 import Viewreviews from './pages/Viewreviews';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
+import Dashboard from "./pages/Dashboard";
 
 const ProtectedRoute = ({ isLoggedIn, children }) => {
   return isLoggedIn ? children : <Navigate to="/login" />;
@@ -76,6 +77,14 @@ function App() {
           element={
             <ProtectedRoute isLoggedIn={isLoggedIn}>
               <Viewreviews />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute isLoggedIn={isLoggedIn}>
+              <Dashboard />
             </ProtectedRoute>
           }
         />
