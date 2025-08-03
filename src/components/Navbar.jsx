@@ -7,12 +7,13 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const navItems = [
-    { name: 'Home', path: '/' },
+
     { name: 'Add Task', path: '/addtask' },
     { name: 'View Task', path: '/viewtasks' },
     { name: 'Study Area', path: '/studyarea' },
     { name: 'Reviews', path: '/reviews' },
-    { name: 'View Reviews', path: '/viewreviews' },
+    { name: 'view review', path: '/viewreviews' },
+    { name: 'Dashboard', path: '/dashboard' },
   ];
 
   return (
