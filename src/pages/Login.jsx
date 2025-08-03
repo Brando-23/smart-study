@@ -13,7 +13,7 @@ const Login = ({ setIsLoggedIn }) => {
     e.preventDefault();
     if (form.email === "test@example.com" && form.password === "123456") {
       setIsLoggedIn(true);
-      navigate("/");
+      navigate("/dashboard");
     } else {
       alert("Invalid credentials");
     }
