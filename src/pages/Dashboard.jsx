@@ -7,7 +7,7 @@ function Dashboard() {
   const [reviews, setReviews] = useState([]);
   const [statsData, setStatsData] = useState({
     total: 0,
-    completed: 2,
+    completed: 0,
     reminders: 0,
     doubts: 10,
   });
@@ -24,6 +24,10 @@ function Dashboard() {
         axios.get('http://localhost:3000/api/review/count')
       .then((res) => setStatsData((prev) => ({ ...prev, reminders: res.data.count })))
       .catch((err) => console.error('Error fetching total tasks:', err));
+
+      axios.get('http://localhost:3000/api/taskcompleted/count')
+      .then((res)=> setStatsData((prev)=>({...prev,completed:res.data.count})))
+      .catch((err)=>console.error('error fetching completed tasks:', err));
   }, []);
 
   const stats = [
