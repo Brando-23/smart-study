@@ -54,6 +54,14 @@ app.get('/api/tasks',async(req,res)=>{
     }
 })
 
+const taskcompletedSchema =new mongoose.Schema({
+  taskId:String,
+  taskName:String,
+  description:String,
+  duedate:Date,
+  priority:String
+});
+const TaskCompleted = mongoose.model('TaskCompleted', taskcompletedSchema);
 app.delete('/api/tasks/:id',async(req,res)=>{
     try{
         const taskId = req.params.id;
@@ -62,6 +70,16 @@ app.delete('/api/tasks/:id',async(req,res)=>{
             return res.status(404).json({ message: 'Task not found' });
         }
         console.log('Task deleted successfully:', deltask);
+        const completetask=new TaskCompleted({
+          taskId:deltask._id,
+          taskName:deltask.task,
+          description:deltask.description,
+          duedate:deltask.dueDate,
+          priority:deltask.priority
+        });
+        await completetask.save();
+        res.status(200).json({ message: 'Task save task completed successfully' });
+
     }
     catch(error)
     {
@@ -212,8 +230,16 @@ app.get('/api/review/count', async (req, res) => {
     res.status(500).json({ error: 'Error fetching total Reviews' });
   }
 });
-
-
+// TaskCompleted model assumed as TaskCompleted
+app.get('/api/taskcompleted/count',async(req,res)=>{
+  try{
+    const count=await TaskCompleted.countDocuments();
+    res.json({count});
+  }
+  catch(err) {
+    res.status(500).json({ error: 'Error fetching completed tasks' });
+  }
+});
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');
 })
